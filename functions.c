@@ -133,3 +133,59 @@ void readData(char *fileName, Parameter * parameter)
     fclose(file);
     file = NULL;
 }
+
+/*Currently this funcion can only work with Roughness Global and Elevation ASCII paremeters.
+The user can change this function and the 'createOutputFolders' if he wants to change another parameter.*/
+
+void createOutputList(Parameter * Roughness, Parameter *Elevation, char ** outputList)
+{
+    int nOutputs = Roughness->count * Elevation->count;
+
+    //allocating memory
+    outputList = (char **) malloc(nOutputs*sizeof(char *));
+    if (outputList == NULL)
+    {
+        printf("Couldn't allocate memory to outputList array\n");
+        exit(1);
+    }
+    for (int i = 0; i<nOutputs; i++)
+    {
+        outputList[i] = malloc(20*sizeof(char));
+        if (outputList[i] == NULL)
+        {
+            printf("Couldn't allocate memory to outputList[i] array\n");
+            exit(1);
+        }
+    }
+    for (int i = 0; i<Roughness->count; i++)
+    {
+        for (int j = 0; j<Elevation->count; j++)
+        {
+            char sliceRoughness[10];
+            char sliceElevation[10];
+
+            sscanf(Roughness->array[i], "%*[^0-9]%5[^ ]", sliceRoughness);   // formatting strings
+            sscanf(Elevation->array[j], "%*[^0-9]%5[^.]", sliceElevation);
+
+            snprintf(outputList[i * (Elevation->count) + j], 40, "%s_%s", sliceRoughness, sliceElevation);
+        }
+    }
+}
+
+void createOutputFolders(int nOutputs, char * outputFolder, char ** outputList)
+{
+    for (int i = 0; i<nOutputs;i++)
+	{	
+		char name[20] = {"./"};
+		strcat(name, outputFolder);
+		strcat(name, outputList[i]);
+		strcpy(outputList[i], name);
+
+		if(mkdir(name, 0700))
+		{	
+			printf("Can't create new output folders. Check if there is any old folder in the directory.\n");
+			exit(1);
+		}
+	}
+}
+
