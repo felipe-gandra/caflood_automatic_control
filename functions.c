@@ -8,12 +8,37 @@
 #include <time.h>
 
 
-typedef struct DATA{
+typedef struct PARAMETER{
     char name[20];
     char ** array;
     int count;
-}Data;
+}Parameter;
 
+void initParameter(Parameter * parameter, char * parameterName)
+{
+    parameter = (Parameter *) malloc(sizeof(Parameter));
+    if (parameter == NULL)
+    {
+        printf("Couldn't alocate memory to parameter struct\n");
+        exit(1);
+    }
+    parameter->array = (char **) malloc(15*sizeof(char *));
+    if (parameter->array == NULL)
+    {
+        printf("Couldn't alocate memory to array in struct\n");
+        exit(1);
+    }
+    for (int i = 0; i<15; i++)
+    {
+        parameter->array[i] = (char *) malloc(30*sizeof(char));
+        if (parameter->array[i] == NULL)
+        {
+            printf("Couldn't alocate memory to array[i] in struct\n");
+            exit(1);
+        }
+    }
+    strcpy(parameter->name, parameterName);
+}
 
 void freeArray(void **array, int n)
 {
@@ -74,7 +99,7 @@ void printTime(int begin, int end, char *name)
 Function to read and save all values of a certain parameter.It is used to save the list of 
 parameters that are going to be used.
 */
-void saveValues(Data * parameter)
+void saveValues(Parameter * parameter)
 {   
     char * value;
     while ((value = strtok(NULL, ",\n")) != NULL)
@@ -84,7 +109,27 @@ void saveValues(Data * parameter)
     }
 }
 
-void readData()
+void readData(char *fileName, Parameter * parameter)
 {
-    
+    //opening file with parameter values
+    FILE * file = fopen(fileName, "r+");
+    if (file == NULL)
+    {
+        printf("Couldn't open file with parameter values\n");
+        exit(1);
+    }
+
+    char line[250];
+    char * parameterName;
+    while (fgets(line, 250, file) != NULL)  //search for parameter name
+    {
+        parameterName = strtok(line, ",");
+        if (strcmp(parameterName, parameter->name) == 0)  //found the correct line
+        {
+            saveValues(parameter);  //catch values and save
+        }
+    }
+
+    fclose(file);
+    file = NULL;
 }
