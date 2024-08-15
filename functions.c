@@ -186,3 +186,54 @@ void createOutputFolders(int nOutputs, char * outputFolder, char ** outputList)
 	}
 }
 
+
+void changeParameter(char * parameterName, char * newValue, char * inputFile, char * inputDir)
+{
+    char tempDir[40];
+    strcpy(tempDir, inputDir);
+    strcat(tempDir, "temp.csv\0");  //temporary file directory
+
+    strcat(inputDir, inputFile);
+
+    FILE *file = fopen(inputFile, "r");
+    if (file == NULL)
+    {
+        printf("Couldn't open input file\n");
+        exit(1);
+    }
+
+    FILE *tempFile = fopen(tempDir, "w+");
+    if (tempFile == NULL)
+    {
+        printf("Couldn't create temporary file\n");
+        exit(1);
+    }
+    
+    char line[100];
+    char tempLine[100];
+    char * parameter;
+
+    while (fgets(line, 100, file) != NULL)
+    {
+        strcpy(tempLine, line);
+        parameter = strtok(tempLine, ",");
+        if (strcmp(parameter, parameterName) == 0){  //found the line that needs to be changed
+            fprintf(tempFile, "%s,%s\n", parameterName, newValue);  //write the new parameter value in the temp file
+        }
+        else{  //wrong line: just copy to the new file
+            fprintf(tempFile, "%s", line);
+        }
+        
+    }
+    fclose(file); file = NULL;
+    fclose(tempFile); tempFile = NULL;
+    if (remove(inputDir) != 0){
+        printf("Couldn't delete file while changing parameter value\n");
+        exit(1);
+    }
+    if (rename(tempDir, inputDir))
+    {
+        printf("Couldn't rename temporary file\n");
+        exit(1);
+    }
+}
