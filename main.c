@@ -22,11 +22,18 @@ int main()
 
     printf("c");
 
-    createOutputFolders(nOutputs, "output/", outputList);
+    //createOutputFolders(nOutputs, "output/", outputList);
 
     printf("d");
 
     freeArray((void ***)&outputList, nOutputs);
+
+    char newValue[100] = {"0.999"};
+    char inputFile[100] = {"config2016_100.csv\0"};
+    char inputDir[100] = {"data/\0"};
+
+    changeParameter(roughness->name, roughness->array[5], inputFile, inputDir);
+    changeParameter(elevation->name, elevation->array[1], inputFile, inputDir);
 
     return 0;
 }

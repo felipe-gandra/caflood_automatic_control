@@ -22,4 +22,6 @@
     void createTimeFile(void);
 
     void freeArray(void ***array, int n);
+
+    void changeParameter(char * parameterName, char * newValue, char * inputFile, char * inputDir);
 #endif

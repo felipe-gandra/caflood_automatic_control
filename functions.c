@@ -188,23 +188,21 @@ void createOutputFolders(int nOutputs, char * outputFolder, char ** outputList)
 
 
 void changeParameter(char * parameterName, char * newValue, char * inputFile, char * inputDir)
-{
+{   
+    char copyInputDir[40]; strcpy(copyInputDir, inputDir);
     char tempDir[40];
     strcpy(tempDir, inputDir);
     strcat(tempDir, "temp.csv\0");  //temporary file directory
+    strcat(copyInputDir, inputFile);
 
-    strcat(inputDir, inputFile);
-
-    FILE *file = fopen(inputFile, "r");
-    if (file == NULL)
-    {
+    FILE *file = fopen(copyInputDir, "r");  //input file
+    if (file == NULL){
         printf("Couldn't open input file\n");
         exit(1);
     }
 
     FILE *tempFile = fopen(tempDir, "w+");
-    if (tempFile == NULL)
-    {
+    if (tempFile == NULL){
         printf("Couldn't create temporary file\n");
         exit(1);
     }
@@ -216,9 +214,9 @@ void changeParameter(char * parameterName, char * newValue, char * inputFile, ch
     while (fgets(line, 100, file) != NULL)
     {
         strcpy(tempLine, line);
-        parameter = strtok(tempLine, ",");
+        parameter = strtok(tempLine, "\t\t,");
         if (strcmp(parameter, parameterName) == 0){  //found the line that needs to be changed
-            fprintf(tempFile, "%s,%s\n", parameterName, newValue);  //write the new parameter value in the temp file
+            fprintf(tempFile, "%s\t\t,%s\n", parameterName, newValue);  //write the new parameter value in the temp file
         }
         else{  //wrong line: just copy to the new file
             fprintf(tempFile, "%s", line);
@@ -227,11 +225,11 @@ void changeParameter(char * parameterName, char * newValue, char * inputFile, ch
     }
     fclose(file); file = NULL;
     fclose(tempFile); tempFile = NULL;
-    if (remove(inputDir) != 0){
+    if (remove(copyInputDir) != 0){
         printf("Couldn't delete file while changing parameter value\n");
         exit(1);
     }
-    if (rename(tempDir, inputDir))
+    if (rename(tempDir, copyInputDir))
     {
         printf("Couldn't rename temporary file\n");
         exit(1);
