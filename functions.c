@@ -8,14 +8,12 @@
 #include <time.h>
 
 
-typedef struct PARAMETER{
-    char name[20];
-    char ** array;
-    int count;
-}Parameter;
+typedef struct PARAMETER Parameter;
 
-void initParameter(Parameter * parameter, char * parameterName)
-{
+
+Parameter * initParameter(char * parameterName)
+{   
+    Parameter * parameter;
     parameter = (Parameter *) malloc(sizeof(Parameter));
     if (parameter == NULL)
     {
@@ -38,25 +36,25 @@ void initParameter(Parameter * parameter, char * parameterName)
         }
     }
     strcpy(parameter->name, parameterName);
+    parameter->count = 0;
+
+    return parameter;
 }
 
-void freeArray(void **array, int n)
+void freeArray(void ***array, int n)
 {
-    if (array == NULL)
+    if (array == NULL || *array == NULL)
     {
         printf("The pointer was NULL\n");
         exit(1);
     }
+
     for (int i = 0; i < n; i++)
     {
-        if (array[i] != NULL)
-        {
-            free(array[i]);
-            array[i] = NULL;
-        }
+        free((*array)[i]);
     }
-    free(array);
-    array = NULL;
+    free(*array);
+    *array = NULL;
 }
 
 
@@ -136,21 +134,21 @@ void readData(char *fileName, Parameter * parameter)
 
 /*Currently this funcion can only work with Roughness Global and Elevation ASCII paremeters.
 The user can change this function and the 'createOutputFolders' if he wants to change another parameter.*/
-void createOutputList(Parameter * Roughness, Parameter *Elevation, char ** outputList)
+void createOutputList(Parameter * Roughness, Parameter *Elevation, char *** outputList)
 {
     int nOutputs = Roughness->count * Elevation->count;
 
     //allocating memory
-    outputList = (char **) malloc(nOutputs*sizeof(char *));
-    if (outputList == NULL)
+    *outputList = (char **) malloc(nOutputs*sizeof(char *));
+    if (*outputList == NULL)
     {
         printf("Couldn't allocate memory to outputList array\n");
         exit(1);
     }
     for (int i = 0; i<nOutputs; i++)
     {
-        outputList[i] = malloc(20*sizeof(char));
-        if (outputList[i] == NULL)
+        (*outputList)[i] = malloc(20*sizeof(char));
+        if ((*outputList)[i] == NULL)
         {
             printf("Couldn't allocate memory to outputList[i] array\n");
             exit(1);
@@ -166,7 +164,7 @@ void createOutputList(Parameter * Roughness, Parameter *Elevation, char ** outpu
             sscanf(Roughness->array[i], "%*[^0-9]%5[^ ]", sliceRoughness);   // formatting strings
             sscanf(Elevation->array[j], "%*[^0-9]%5[^.]", sliceElevation);
 
-            snprintf(outputList[i * (Elevation->count) + j], 40, "%s_%s", sliceRoughness, sliceElevation);
+            snprintf((*outputList)[i * (Elevation->count) + j], 40, "%s_%s", sliceRoughness, sliceElevation);
         }
     }
 }

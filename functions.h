@@ -1,15 +1,19 @@
 #ifndef FUNCTIONS_H
     #define FUNCTIONS_H
 
-    typedef struct PARAMETER Parameter;
+    typedef struct PARAMETER{
+        char name[20];
+        char ** array;
+        int count;
+    }Parameter;
 
-    void initParameter(Parameter * parameter, char * parameterName);
+    Parameter * initParameter(char * parameterName);
 
     void saveValues(Parameter * parameter);
 
     void readData(char *fileName, Parameter * parameter);
 
-    void createOutputList(Parameter * Roughness, Parameter *Elevation, char ** outputList);
+    void createOutputList(Parameter * Roughness, Parameter *Elevation, char *** outputList);
 
     void createOutputFolders(int nOutputs, char * outputFolder, char ** outputList);
 
@@ -17,5 +21,5 @@
 
     void createTimeFile(void);
 
-    void freeArray(void **array, int n);
+    void freeArray(void ***array, int n);
 #endif
