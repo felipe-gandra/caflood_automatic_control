@@ -24,4 +24,6 @@
     void freeArray(void ***array, int n);
 
     void changeParameter(char * parameterName, char * newValue, char * inputFile, char * inputDir);
+
+    void runCaflood(char ** args);
 #endif

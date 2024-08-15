@@ -235,3 +235,23 @@ void changeParameter(char * parameterName, char * newValue, char * inputFile, ch
         exit(1);
     }
 }
+
+
+void runCaflood(char ** args)
+{
+    pid_t pid = fork();
+
+	if (pid == -1){
+		printf("Couldn't create child process\n");
+        exit(1);
+	}
+	else if (pid == 0){
+	    execv("./caflood", args);
+	    printf("Couldn't execute CAFlood\n");
+		
+	}
+	else{     
+	    int status;
+		waitpid(pid, &status, 0);  //wait until the child's process is over
+	}
+}

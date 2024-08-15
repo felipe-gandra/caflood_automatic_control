@@ -1,5 +1,7 @@
-/data/
+data/*
 Makefile
 *.o
 teste
 dados.csv
+
+time.txt
