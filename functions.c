@@ -136,7 +136,6 @@ void readData(char *fileName, Parameter * parameter)
 
 /*Currently this funcion can only work with Roughness Global and Elevation ASCII paremeters.
 The user can change this function and the 'createOutputFolders' if he wants to change another parameter.*/
-
 void createOutputList(Parameter * Roughness, Parameter *Elevation, char ** outputList)
 {
     int nOutputs = Roughness->count * Elevation->count;
