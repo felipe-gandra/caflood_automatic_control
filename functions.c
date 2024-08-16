@@ -20,13 +20,13 @@ Parameter * initParameter(char * parameterName)
         printf("Couldn't alocate memory to parameter struct\n");
         exit(1);
     }
-    parameter->array = (char **) malloc(15*sizeof(char *));
+    parameter->array = (char **) malloc(30*sizeof(char *));
     if (parameter->array == NULL)
     {
         printf("Couldn't alocate memory to array in struct\n");
         exit(1);
     }
-    for (int i = 0; i<15; i++)
+    for (int i = 0; i<30; i++)
     {
         parameter->array[i] = (char *) malloc(30*sizeof(char));
         if (parameter->array[i] == NULL)
@@ -101,7 +101,11 @@ void saveValues(Parameter * parameter)
 {   
     char * value;
     while ((value = strtok(NULL, ",\n")) != NULL)
-    {
+    {   
+        if (parameter->count >=30){
+            printf("Max number of parameter values (30) execedeed\n");
+            exit(1);
+        }
         strcpy(parameter->array[parameter->count], value);
         parameter->count++;
     }
@@ -170,9 +174,8 @@ void createOutputList(Parameter * Roughness, Parameter *Elevation, char *** outp
 }
 
 void createOutputFolders(int nOutputs, char * outputFolder, char ** outputList)
-{
-    for (int i = 0; i<nOutputs;i++)
-	{	
+{   
+    for (int i = 0; i<nOutputs;i++){	
 		char name[20] = {"./"};
 		strcat(name, outputFolder);
 		strcat(name, outputList[i]);
@@ -205,14 +208,12 @@ void changeParameter(char * parameterName, char * newValue, char * inputFile, ch
     if (tempFile == NULL){
         printf("Couldn't create temporary file\n");
         exit(1);
-    }
-    
+    } 
     char line[100];
     char tempLine[100];
     char * parameter;
 
-    while (fgets(line, 100, file) != NULL)
-    {
+    while (fgets(line, 100, file) != NULL){
         strcpy(tempLine, line);
         parameter = strtok(tempLine, "\t\t,");
         if (strcmp(parameter, parameterName) == 0){  //found the line that needs to be changed
@@ -220,8 +221,7 @@ void changeParameter(char * parameterName, char * newValue, char * inputFile, ch
         }
         else{  //wrong line: just copy to the new file
             fprintf(tempFile, "%s", line);
-        }
-        
+        }   
     }
     fclose(file); file = NULL;
     fclose(tempFile); tempFile = NULL;
