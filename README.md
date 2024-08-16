@@ -25,6 +25,7 @@ Currently, this program is capable of automatically executing CAFlood while vary
 #### Compiling with Makefile
 If you want to compile it in your machine, you can use Makefile like this:
 
+```
 all: functions.o main.o
 	gcc functions.o main.o -Wall -o autocaflood
 
@@ -33,7 +34,7 @@ functions.o:
 
 main.o:
 	gcc -c main.c
-
+```
 
 ## Contact
 
