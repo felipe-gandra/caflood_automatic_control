@@ -3,5 +3,5 @@ Makefile
 *.o
 teste
 dados.csv
-
+output/*
 time.txt
