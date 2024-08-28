@@ -151,7 +151,7 @@ void createOutputList(Parameter * Roughness, Parameter *Elevation, char *** outp
     }
     for (int i = 0; i<nOutputs; i++)
     {
-        (*outputList)[i] = malloc(20*sizeof(char));
+        (*outputList)[i] = malloc(40*sizeof(char));
         if ((*outputList)[i] == NULL)
         {
             printf("Couldn't allocate memory to outputList[i] array\n");

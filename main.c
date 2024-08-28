@@ -29,27 +29,29 @@ int main(int argc, char *argv[]){
 
     time_t begin;
     time_t end;
-    createTimeFile();printf("%s\n\n\n", outputFolder);
+    createTimeFile();
 
     //main loop
     for (int i = 0; i<roughness->count; i++){
         changeParameter(roughness->name, roughness->array[i], inputFile, inputDir);
         
-        for (int j = 0; j<elevation->count; j++){                                      //currently output folder
-            char *args[] = {"./caflood", "-WCA2D", inputDir, inputFile, strcat(outputList[roughness->count*i+j], "/"), NULL};
+        for (int j = 0; j<elevation->count; j++){                                      
             changeParameter(elevation->name, elevation->array[j], inputFile, inputDir);
-            time(&begin);
 
+                                                                            //currently output folder
+            char *args[] = {"./caflood", "-WCA2D", inputDir, inputFile, strcat(outputList[elevation->count*i+j], "/"), NULL};
+            
+            time(&begin);
             runCaflood(args);
 
             time(&end);
-            printTime(begin, end, outputList[roughness->count*i+j]);
+            printTime(begin, end, outputList[elevation->count*i+j]);
         }
     }
-
+    
     freeArray((void***)&outputList, nOutputs);
-    freeArray((void***)roughness->array, 30);
-    freeArray((void***)elevation->array, 30);
+    freeArray((void***)&(roughness->array), 30);
+    freeArray((void***)&(elevation->array), 30);
 
 
     return 0;
