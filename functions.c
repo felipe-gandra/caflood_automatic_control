@@ -189,6 +189,26 @@ void createOutputFolders(int nOutputs, char * outputFolder, char ** outputList)
 	}
 }
 
+char ** createSimNames(char ** outputList, int nOutputs){
+    char ** simNames = (char **)malloc(sizeof(char*)*nOutputs);
+    if (simNames == NULL){
+        printf("Couldn't allocate memory\n");
+        exit(1);
+    }
+    for (int i = 0; i<nOutputs; i++){
+        simNames[i] = (char *) malloc(sizeof(char)*20);
+        if (simNames[i] == NULL){
+            printf("Couldn't allocate memory\n");
+            exit(1);
+        }
+
+        strcpy(simNames[i], outputList[i]);
+        memmove(simNames[i]+1, simNames[i], strlen(simNames[i]));
+        simNames[i][0] = ' ';
+    }
+    return simNames;
+}
+
 
 void changeParameter(char * parameterName, char * newValue, char * inputFile, char * inputDir)
 {   

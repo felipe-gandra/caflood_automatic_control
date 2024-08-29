@@ -82,4 +82,7 @@
 
     -args: list of arguments.*/
     void runCaflood(char ** args);
+
+
+    char ** createSimNames(char ** outputList, int nOutputs);
 #endif
