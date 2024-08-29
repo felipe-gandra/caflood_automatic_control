@@ -3,6 +3,8 @@
 
 This repository is dedicated to the development of software that can automatically execute CAFlood multiple times while varying input parameters. This is part of my research project at the University of São Paulo.
 
+![Flowchart](https://github.com/felipe-gandra/caflood_automatic_control/blob/main/images/flowchart.png?raw=true)
+
 ## How to Install and Run the Project
 
 You can either download the executable file or compile the code on your own machine. After that, you should create a folder to store the outputs and input files. Execution is done via the terminal using the command:
