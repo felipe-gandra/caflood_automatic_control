@@ -83,6 +83,10 @@
     -args: list of arguments.*/
     void runCaflood(char ** args);
 
-
+    /*
+    -Function to create the simulation's names as <roughness_value>_<pixel_size>
+    
+    -outputList: list containing all combination of outputs
+    -nOutputs: number of outputs    */
     char ** createSimNames(char ** outputList, int nOutputs);
 #endif

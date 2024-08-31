@@ -65,7 +65,7 @@ int main(int argc, char *argv[]){
     freeArray((void***)&(roughness->array), 30);
     freeArray((void***)&(elevation->array), 30);
     freeArray((void***)&simNames, nOutputs);
-
+    
 
     return 0;
 }
