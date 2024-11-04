@@ -63,11 +63,22 @@ Function to create a txt file (called time.txt) to store the execution time of e
 parameter combination
 */
 void createTimeFile(void)
-{	
-	FILE *file = fopen("time.txt", "w");
+{	   
+    FILE * file;
+    FILE * exists = fopen("time.txt", "r");
+    if (exists == NULL){
+        fclose(exists); //the file doesn't exist
+        file = fopen("time.txt", "w");
+    }
+    else{
+        fclose(exists);  //the file already exists
+        exists = NULL;
+        file = fopen("time.txt", "r+");
+    }
+
 	if (file == NULL)
 	{
-		printf("Couldn't create file time.txt\n");
+		printf("Couldn't open/create file time.txt\n");
 		exit(1);
 	}
 	fclose(file);
@@ -79,7 +90,7 @@ void createTimeFile(void)
 Function to print the execution times in the time file
 */
 void printTime(int begin, int end, char *name)
-{
+{   
 	FILE *file = fopen("time.txt", "r+");
 	if (file == NULL)
 	{
