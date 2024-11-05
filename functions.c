@@ -67,8 +67,8 @@ void createTimeFile(void)
     FILE * file;
     FILE * exists = fopen("time.txt", "r");
     if (exists == NULL){
-        fclose(exists); //the file doesn't exist
-        file = fopen("time.txt", "w");
+        //file doesnt exist
+        file = fopen("time.txt", "w"); //creates
     }
     else{
         fclose(exists);  //the file already exists
